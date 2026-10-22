@@ -1,17 +1,30 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import javax.sound.sampled.AudioFormat;
+// this describes how the audio is stored
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.io.File;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+public class Main {
+    public static void main(String[] args) throws Exception {
+        File file = new File("audio/test.wav");
+
+        try (AudioInputStream stream = AudioSystem.getAudioInputStream(file)) {
+//            this opens the file as a stream of audio data, and since it's build into java we dont need to do much
+            AudioFormat format = stream.getFormat();
+
+            float sampleRate = format.getSampleRate();
+            int channels = format.getChannels();
+            long frames = stream.getFrameLength();
+            double seconds = frames / sampleRate;
+
+            System.out.println("Sample rate: " + sampleRate + " Hz");
+            System.out.println("Channels: " + channels);
+            System.out.println("Frames: " + frames);
+//          frames is one measurement across all channels (stereo has two channels, left and right, but still one frame per moment in time
+            System.out.println("Length: " + seconds + (" seconds"));
         }
     }
+
 }
